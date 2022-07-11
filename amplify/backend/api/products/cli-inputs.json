@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "products",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "C:\\Users\\rabbi\\OneDrive\\ドキュメント\\GitHub\\products\\amplify\\backend\\api\\products\\schema.graphql",
+    "defaultAuthType": {
+      "mode": "API_KEY",
+      "expirationTime": 7
+    }
+  }
+}

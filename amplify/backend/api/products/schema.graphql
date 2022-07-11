@@ -1,0 +1,132 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
+
+# 商品基本情報
+type Product @model {
+  id: ID!
+  code: String!
+  name: String!
+  price: Float!
+  unit: Unit @hasOne
+  futureOption: FutureOption
+  derivedProducts: [DerivedProduct] @hasMany
+}
+
+# 単位
+type Unit @model {
+    id: ID!
+    name: String!
+}
+
+# セット商品
+type Combo @model {
+    id: ID!
+    code: String!
+    name: String!
+    comboDetails: [ComboDetail] @hasMany
+}
+
+# セット商品明細
+type ComboDetail @model {
+    id: ID!
+    code: String!
+    product: Product @hasOne
+    quantity: Float!
+}
+
+# 分類
+type Classification @model {
+    id: ID!
+    name: String!
+    children: [Classification] @hasMany
+    parent: Classification @belongsTo
+}
+
+# フューチャー体系
+type FutureOption @model {
+  id: ID!
+  code: String!
+  name: String!
+  details: [FutureOptionDetail] @hasMany
+}
+
+# フューチャー明細
+type FutureOptionDetail @model {
+  id: ID!
+  no: Int!
+  name: String!
+  values: [FutureOptionDetailValue] @hasMany
+}
+
+# フューチャー別オプション明細
+type FutureOptionDetailValue @model {
+  id: ID!
+  code: String!
+  name: String!
+}
+
+#派生商品明細
+type DerivedProduct @model {
+  id: ID!
+  product: Product @belongsTo
+  name: String!
+  futureOptionValues: [FutureOptionDetailValue] @hasMany
+  price: Float!
+}
+
+# 仕入れ先
+type Vendor @model {
+    id: ID!
+    code: String!
+    name: String!
+}
+
+# 仕入れ先別契約単価
+type VendorUnitPrice @model {
+    id: ID!
+    product: Product! @hasOne
+    vendor: Vendor! @hasOne
+    effectiveDate: AWSDate!
+    purchasePrice: Float!
+}
+
+# 得意先
+type Customer @model {
+    id: ID!
+    code: String!
+    name: String!
+}
+
+# 得意先別契約単価
+type CustomerUnitPrice @model {
+    id: ID!
+    product: Product! @hasOne
+    customer: Customer! @hasOne
+    effectiveDate: AWSDate!
+    salesPrice: Float!
+}
+
+# 特売
+type SpecialSale @model {
+  id: ID!
+  code: String!
+  startDate: AWSDateTime!
+  endDate: AWSDateTime!
+}
+
+# 特売単価
+type SpecialSalePrice @model {
+  id: ID!
+  no: Int!
+  product: Product! @hasOne
+  unitPrice: Float!
+}
+
+# レンジ単価
+type RangePrice @model {
+  id: ID!
+  product: Product! @hasOne
+  fromAmout: Float!
+  unitPrice: Float!
+}
